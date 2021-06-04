@@ -1,0 +1,31 @@
+trigger: none
+
+pool:
+  vmImage: 'ubuntu-latest'
+  
+resources:
+  container:
+    - container: redis4
+	  image: redis:4-alpine
+	  ports:
+	    - 6379:6379
+	- container: redis5
+	  image: redis:5-alpine
+	  ports:
+	    - 6379:6379
+		
+		
+strategy:
+  matrix:
+    redis4:
+	  redisService: redis4
+	redis5:
+	  redisService: redis5
+	  
+	  
+services:
+  redis: $[ variables['redisService']]
+  
+steps:
+  - bash: |
+      sudo apt-get update -y && sudo apt-get upgrade -y
